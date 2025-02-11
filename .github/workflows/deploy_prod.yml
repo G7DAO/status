@@ -20,6 +20,7 @@ jobs:
               with:
                   node-version: "20.14.0"
 
+            - name: Install and build staging app
               run: |
                   npm install
                   npm run build
