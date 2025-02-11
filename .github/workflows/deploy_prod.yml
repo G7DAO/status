@@ -32,4 +32,4 @@ jobs:
                   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
               run: |
                   aws s3 sync ./dist ${{ secrets.AWS_FRONTEND_BUCKET_STATUS }}/${{ github.event.inputs.branch || github.event.pull_request.head.ref }} --delete
-                  aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID_STATUS }} --paths '/${{ github.event.inputs.branch || github.event.pull_request.head.ref }}/*'
+                  aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID_STATUS }} --paths '/*'
