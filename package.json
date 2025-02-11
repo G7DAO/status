@@ -1,5 +1,5 @@
 {
-  "name": "@wbuilder/dashboard",
+  "name": "status",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -12,8 +12,9 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@ethersproject/abstract-provider": "^5.7.0",
     "@reservoir0x/relay-kit-ui": "^2.4.0",
-    "@reservoir0x/relay-sdk": "^1.4.8",
+    "@reservoir0x/relay-sdk": "^1.6.1",
     "@tanstack/react-query": "^5.64.1",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
