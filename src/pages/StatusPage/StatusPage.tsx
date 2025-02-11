@@ -22,7 +22,6 @@ interface TimestampDelays {
   [blockchain: string]: string
 }
 
-const CORS_PROXY = 'https://corsproxy.io/'
 const NODE_STATUS_URL = 'https://nodes.monitoring.game7.build/status'
 const GAME7_STATUS_URL = 'https://game7.monitoring.moonstream.to/status'
 const SEER_STATUS_URL = 'https://seer.monitoring.moonstream.to/status'
@@ -40,9 +39,9 @@ const StatusPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const [nodesResponse, game7Response, seerResponse] = await Promise.all([
-          axios.get<NodeStatus[]>(`${CORS_PROXY}${NODE_STATUS_URL}`),
-          axios.get<NodeStatus[]>(`${CORS_PROXY}${GAME7_STATUS_URL}`),
-          axios.get<NodeStatus[]>(`${CORS_PROXY}${SEER_STATUS_URL}`)
+          axios.get<NodeStatus[]>(`${NODE_STATUS_URL}`),
+          axios.get<NodeStatus[]>(`${GAME7_STATUS_URL}`),
+          axios.get<NodeStatus[]>(`${SEER_STATUS_URL}`)
         ])
 
         setNodes(nodesResponse.data)
