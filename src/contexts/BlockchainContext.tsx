@@ -7,8 +7,6 @@ import {
   DEFAULT_LOW_NETWORK,
   L1_MAIN_NETWORK,
   L1_NETWORK,
-  L2_MAIN_NETWORK,
-  L2_NETWORK,
   L3_MAIN_NETWORK,
   L3_NETWORK
 } from '../../constants'
@@ -102,7 +100,7 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
 
   const setSelectedLowNetwork = (network: NetworkInterface) => {
     if (network === L1_NETWORK || network === L1_MAIN_NETWORK) {
-      _setSelectedHighNetwork(selectedNetworkType === 'Testnet' ? L2_NETWORK : L2_MAIN_NETWORK)
+
     } else {
       _setSelectedHighNetwork(selectedNetworkType === 'Testnet' ? L3_NETWORK : L3_MAIN_NETWORK)
     }
@@ -110,11 +108,6 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
   }
 
   const setSelectedHighNetwork = (network: NetworkInterface) => {
-    if (network === L2_NETWORK || network === L2_MAIN_NETWORK) {
-      _setSelectedLowNetwork(selectedNetworkType === 'Testnet' ? L1_NETWORK : L1_MAIN_NETWORK)
-    } else {
-      _setSelectedLowNetwork(selectedNetworkType === 'Testnet' ? L2_NETWORK : L2_MAIN_NETWORK)
-    }
     _setSelectedHighNetwork(network)
   }
 

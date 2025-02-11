@@ -1,4 +1,4 @@
-import { getHighNetworks, getLowNetworks, HIGH_NETWORKS, LOW_NETWORKS, USDC, USDC_MAINNET } from '../../constants'
+import { getHighNetworks, getLowNetworks, HIGH_NETWORKS, LOW_NETWORKS, USDC } from '../../constants'
 import { ethers } from 'ethers'
 import { NetworkInterface, NetworkType } from '@/contexts/BlockchainContext'
 import { providers } from 'ethers'
@@ -140,8 +140,7 @@ export const getTokenSymbol = (
 export const isUSDC = (tokenAddress: string): boolean => {
   const normalizedTokenAddress = tokenAddress.toLowerCase()
   const addressToChainId = Object.fromEntries([
-    ...Object.entries(USDC).map(([chainId, address]) => [address.toLowerCase(), chainId]),
-    ...Object.entries(USDC_MAINNET).map(([chainId, address]) => [address.toLowerCase(), chainId])
+    ...Object.entries(USDC).map(([chainId, address]) => [address.toLowerCase(), chainId])
   ])
 
 
