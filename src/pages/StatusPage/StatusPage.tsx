@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import styles from './LegalPage.module.css'
 import { useMediaQuery } from 'summon-ui/mantine'
 import Navbar from '@/components/landing/Navbar'
-import Footer from '@/components/landing/Footer'
 import axios from 'axios'
 
 interface NodeStatus {
@@ -156,9 +155,6 @@ const StatusPage: React.FC = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div style={{ width: 'calc(100% + 24px)' }}>
-              <Footer />
             </div>
           </div>
         </div>

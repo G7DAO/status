@@ -2,12 +2,11 @@ import { createBrowserRouter } from 'react-router-dom'
 import ErrorBoundary from '@/components/ErrorBoundry'
 //Pages
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage'
-import StatusPage from './pages/LegalPage/StatusPage'
-import { LEGAL } from './legal'
+import StatusPage from './pages/StatusPage/StatusPage'
 
 const router = createBrowserRouter([
   {
-    element: <StatusPage legalContent={LEGAL.privacy}/>,
+    element: <StatusPage />,
     path: '/',
     errorElement: <ErrorBoundary />
   },
