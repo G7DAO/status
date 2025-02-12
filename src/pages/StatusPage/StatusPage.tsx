@@ -26,6 +26,8 @@ interface TimestampDelays {
 const NODE_STATUS_URL = 'https://nodes.monitoring.game7.build/status'
 const GAME7_STATUS_URL = 'https://game7.monitoring.moonstream.to/status'
 const SEER_STATUS_URL = 'https://seer.monitoring.moonstream.to/status'
+const MOONSTREAM_STATUS_URL = 'https://monitoring.moonstream.to/status'
+
 
 const normalizeName = (name: string): string => {
   return name
@@ -42,14 +44,18 @@ const StatusPage: React.FC = () => {
   const [timestampDelays, setTimestampDelays] = useState<TimestampDelays | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [moonstreamNodes, setMoonstreamNodes] = useState<NodeStatus[]>([])
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [nodesResponse, game7Response, seerResponse] = await Promise.all([
+        const [nodesResponse, game7Response, seerResponse, moonstreamResponse
+        ] = await Promise.all([
           axios.get<NodeStatus[]>(`${NODE_STATUS_URL}`),
           axios.get<NodeStatus[]>(`${GAME7_STATUS_URL}`),
-          axios.get<NodeStatus[]>(`${SEER_STATUS_URL}`)
+          axios.get<NodeStatus[]>(`${SEER_STATUS_URL}`),
+          axios.get<NodeStatus[]>(`${MOONSTREAM_STATUS_URL}`)
         ])
 
         setNodes([...nodesResponse.data].sort((a, b) => a.name.localeCompare(b.name)))
@@ -65,6 +71,7 @@ const StatusPage: React.FC = () => {
             'Game7 Orbit Arbitrum Sepolia',
             'Imx Zkevm',
             'Imx Zkevm Sepolia',
+            'Mantle Sepolia',
             'Ronin',
             'Ronin Saigon',
             'Xai',
@@ -78,6 +85,17 @@ const StatusPage: React.FC = () => {
               ]).filter(([key]) => !excludedBlockchains.includes(key))
           );
           setTimestampDelays(normalizedDelays)
+
+          const filteredMoonstreamNodes = moonstreamResponse.data
+              .filter(node => node.name.startsWith('node_'))
+              .map(node => ({
+                ...node,
+                normalized_name: normalizeName(node.name.replace('node_', ''))
+              }))
+              .sort((a, b) => a.normalized_name.localeCompare(b.normalized_name))
+
+          setMoonstreamNodes(filteredMoonstreamNodes)
+
         }
       } catch (error) {
         console.error('Error fetching status data:', error)
@@ -119,7 +137,6 @@ const StatusPage: React.FC = () => {
                         <p className={styles.error}>{error}</p>
                     ) : (
                         <>
-                          {/* Game7 Network Status */}
                           <ul className={styles.nodeList}>
                             {game7Statuses
                                 .filter((status) => status.name === 'game7' || status.name === 'game7_testnet')
@@ -133,18 +150,17 @@ const StatusPage: React.FC = () => {
                                             status.response.status === 'ok' ? styles.nodeStatusOk : styles.nodeStatusError
                                           }
                                       >
-                                {status.response.status === 'ok' ? 'Available' : 'Unavailable'}
-                              </span>
+                                        {status.response.status === 'ok' ? 'Available' : 'Unavailable'}
+                                      </span>
                                       {status.response.current_block && (
                                           <span className={styles.blockNumber}>
-                                  Current block: {status.response.current_block}
-                                </span>
+                                            Current block: {status.response.current_block}
+                                          </span>
                                       )}
                                     </li>
                                 ))}
                           </ul>
 
-                          {/* Blockchain Nodes */}
                           <ul className={styles.nodeList}>
                             {nodes.map((node) => (
                                 <li key={node.name} className={styles.nodeItem}>
@@ -154,18 +170,35 @@ const StatusPage: React.FC = () => {
                                         node.response.status === 'ok' ? styles.nodeStatusOk : styles.nodeStatusError
                                       }
                                   >
-                              {node.response.status === 'ok' ? 'Available' : 'Unavailable'}
-                            </span>
+                                    {node.response.status === 'ok' ? 'Available' : 'Unavailable'}
+                                  </span>
                                   {node.response.current_block_number && (
-                                      <span className={styles.blockNumber}>
-                                Current block: {node.response.current_block_number}
-                              </span>
+                                      <span className={styles.blockNumber}>Current block: {node.response.current_block_number}</span>
                                   )}
                                 </li>
                             ))}
                           </ul>
 
-                          {/* Game7 Services Status */}
+                          <div className={styles.nodeSection}>
+                            <ul className={styles.nodeList}>
+                              {moonstreamNodes.filter(node => ['Amoy', 'Optimism', 'Zksync Era'].includes(node.normalized_name)).map(node => (
+                                  <li key={node.name} className={styles.nodeItem}>
+                                    <span className={styles.nodeName}>{node.normalized_name}</span>
+                                    <span
+                                        className={
+                                          node.response.status === 'ok' ? styles.nodeStatusOk : styles.nodeStatusError
+                                        }
+                                    >
+                                      {node.response.status === 'ok' ? 'Available' : 'Unavailable'}
+                                    </span>
+                                    {node.response.current_block && (
+                                        <span className={styles.blockNumber}>Current block: {node.response.current_block}</span>
+                                    )}
+                                  </li>
+                              ))}
+                            </ul>
+                          </div>
+
                           <ul className={styles.nodeList}>
                             {game7Statuses
                                 .filter((status) => status.name === 'faucetbalanace' || status.name === 'protocolapi')
@@ -177,8 +210,8 @@ const StatusPage: React.FC = () => {
                                             status.response.status === 'ok' ? styles.nodeStatusOk : styles.nodeStatusError
                                           }
                                       >
-                                {status.response.status === 'ok' ? 'Available' : 'Unavailable'}
-                              </span>
+                                        {status.response.status === 'ok' ? 'Available' : 'Unavailable'}
+                                      </span>
                                       {status.response.balance && (
                                           <span className={styles.blockNumber}>Balance: {status.response.balance}</span>
                                       )}
