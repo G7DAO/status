@@ -219,7 +219,6 @@ const StatusPage: React.FC = () => {
                                 ))}
                           </ul>
 
-                          {/* Seer API - Timestamp Delays */}
                           {timestampDelays && (
                               <div className={styles.timestampSection}>
                                 <h3>Blockchain Delays</h3>
